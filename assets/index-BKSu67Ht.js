@@ -1,6 +1,6 @@
 function __vite__mapDeps(indexes) {
   if (!__vite__mapDeps.viteFileDeps) {
-    __vite__mapDeps.viteFileDeps = ["./EditorView-B1wZy71I.js","./EditorView-CW0TaDVv.css"]
+    __vite__mapDeps.viteFileDeps = ["./EditorView-CKPRAHAc.js","./EditorView-CtEEGMh_.css"]
   }
   return indexes.map((i) => __vite__mapDeps.viteFileDeps[i])
 }
@@ -9709,6 +9709,12 @@ function createWebHistory(base) {
   });
   return routerHistory;
 }
+function createWebHashHistory(base) {
+  base = location.host ? base || location.pathname + location.search : "";
+  if (!base.includes("#"))
+    base += "#";
+  return createWebHistory(base);
+}
 function isRouteLocation(route) {
   return typeof route === "string" || route && typeof route === "object";
 }
@@ -11181,12 +11187,12 @@ const __vitePreload = function preload(baseModule, deps, importerUrl) {
   });
 };
 const router = createRouter({
-  history: createWebHistory("./"),
+  history: createWebHashHistory(),
   routes: [
     {
       path: "/",
       name: "home",
-      component: () => __vitePreload(() => import("./EditorView-B1wZy71I.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
+      component: () => __vitePreload(() => import("./EditorView-CKPRAHAc.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
     }
   ]
 });
@@ -13166,4 +13172,4 @@ export {
   createRenderer as y,
   createSSRApp as z
 };
-//# sourceMappingURL=index-stso2SF_.js.map
+//# sourceMappingURL=index-BKSu67Ht.js.map
