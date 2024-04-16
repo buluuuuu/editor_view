@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import Button from 'primevue/button';
-import MaterialItem from '@/components/MaterialItem.vue'
 import CustomDropdown from '@/components/CustomDropdown.vue'
+import MaterialList from '@/components/MaterialList.vue'
 
 // 选择风格
 const props = defineProps({
@@ -54,6 +54,82 @@ const handleSelectType = (e) => {
     showTypes.value = false
 }
 
+const materialList = [
+    [
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】1.png', styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】2.png', styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】3.png', styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】4.png', styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】皮带.png', styles:['节日风', '喜庆风'], types: ['服装']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】礼盒正面.png', styles:['节日风', '喜庆风'], types: ['服装']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】礼盒轴测面.png', styles:['节日风', '喜庆风'], types: ['服装']}
+    ],
+    [
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】垫石.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】布料.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】石头.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】礼物盒.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】红色不带壳盒子.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】红色带壳盒子.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣1.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣2.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣3.png', styles:['温馨风']}
+    ],
+    [
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】双11.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】文案.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】晒单返20元E卡.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】植物温和洁面 _ 紧致肌肤毛孔.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】氨基酸美白洁面乳.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】点击进入.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】立即购买     _.png', styles:['温馨风']}
+    ],
+    [
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【LOGO】.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【LOGO】1.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【LOGO】海澜之家.png', styles:['节日风', '喜庆风']}
+    ],
+    [
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】.png', styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】1.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】2.png', styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】3.png', styles:['节日风', '喜庆风']}
+    ]
+]
+
+const selectedMainMaterialList = computed(()=>{
+    return materialList[0].filter((item)=>{
+        let flag = false
+        for (let style of props.selectedStyles) {
+            if (item.styles.includes(style)) {
+                flag = true
+                break
+            }
+        }
+        if (!flag) return false
+        for (let type of props.selectedTypes) {
+            if (item.types.includes(type)) return true
+        }
+    })
+})
+
+const selectedOtherMaterialList = computed(() => {
+    let res = []
+    for (let materials of materialList) {
+        res.push(materials.filter((item)=> {
+            console.log(item);
+                for (let style of props.selectedStyles) {
+                    if (item.styles.includes(style)) return true
+                }
+            }))
+        console.log(res);
+    }
+    return res
+})
+
+const showAll = ref(new Array(5).fill(false))
+
 </script>
 
 <template>
@@ -94,9 +170,9 @@ const handleSelectType = (e) => {
         <!-- 主体物 -->
         <div class="relative flex flex-col gap-4 z-[1]">
             <!-- header -->
-            <div class="flex flex-row justify-between items-center">
+            <div class="materiallistheader flex flex-row justify-between items-center" id="materialListHeader">
                 <span class="font-medium">主体物</span>
-                <Button class="text-[#5F5F5F] text-xs font-light">查看全部</Button>
+                <Button class="text-[#5F5F5F] text-xs font-light" @click="()=>{showAll[0] = !showAll[0]}">{{ showAll[0] ? '收起' : '查看全部' }}</Button>
             </div>
             <div class="relative flex flex-row justify-between items-center z-[100]">
                 <div class="flex flex-row items-start flex-wrap gap-1 shrink-1">
@@ -130,83 +206,52 @@ const handleSelectType = (e) => {
                 </div>
             </div>
             <!-- 素材列表 -->
-            <div class="relative flex flex-row pr-4 gap-2.5 z-0">
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="主体物"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="主体物"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="主体物"></material-item>
-                </div>
+            <div class="relative flex flex-row flex-wrap pr-[1vw] justify-between z-0">
+                <MaterialList img_name="主体物" :MaterialList="selectedMainMaterialList" :showAll="showAll[0]"></MaterialList>
             </div>
         </div>
         <!-- 装饰物 -->
         <div class="relative flex flex-col gap-4 z-0">
             <div class="flex flex-row justify-between items-center">
                 <span class="font-medium">装饰物</span>
-                <Button class="text-[#5F5F5F] text-xs font-light">查看全部</Button>
+                <Button class="text-[#5F5F5F] text-xs font-light" @click="()=>{showAll[1] = !showAll[1]}">{{ showAll[1] ? '收起' : '查看全部' }}</Button>
             </div>
             <!-- 素材列表 -->
-            <div class="flex flex-row pr-4 gap-2.5">
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="装饰物"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="装饰物"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="装饰物"></material-item>
-                </div>
+            <div class="relative flex flex-row flex-wrap pr-[1vw] justify-between z-0">
+                <MaterialList img_name="装饰物" :MaterialList="selectedOtherMaterialList[1]" :showAll="showAll[1]"></MaterialList>
             </div>
         </div>
         <!-- 标语 -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-row justify-between items-center">
                 <span class="font-medium">标语</span>
-                <Button class="text-[#5F5F5F] text-xs font-light">查看全部</Button>
+                <Button class="text-[#5F5F5F] text-xs font-light" @click="()=>{showAll[2] = !showAll[2]}">{{ showAll[2] ? '收起' : '查看全部' }}</Button>
             </div>
             <!-- 素材列表 -->
-            <div class="flex flex-row pr-4 gap-2.5">
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="标语"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="标语"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="标语"></material-item>
-                </div>
+            <div class="relative flex flex-row flex-wrap pr-[1vw] justify-between z-0">
+                <MaterialList img_name="标语" :MaterialList="selectedOtherMaterialList[2]" :showAll="showAll[2]"></MaterialList>
             </div>
         </div>
         <!-- LOGO -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-row justify-between items-center">
                 <span class="font-medium">LOGO</span>
-                <Button class="text-[#5F5F5F] text-xs font-light">查看全部</Button>
+                <Button class="text-[#5F5F5F] text-xs font-light" @click="()=>{showAll[3] = !showAll[3]}">{{ showAll[3] ? '收起' : '查看全部' }}</Button>
             </div>
             <!-- 素材列表 -->
-            <div class="flex flex-row pr-4 gap-2.5">
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="LOGO"></material-item>
-                </div>
+            <div class="relative flex flex-row flex-wrap pr-[1vw] justify-between z-0">
+                <MaterialList img_name="LOGO" :MaterialList="selectedOtherMaterialList[3]" :showAll="showAll[3]"></MaterialList>
             </div>
         </div>
         <!-- 背景 -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-row justify-between items-center">
                 <span class="font-medium">背景</span>
-                <Button class="text-[#5F5F5F] text-xs font-light">查看全部</Button>
+                <Button class="text-[#5F5F5F] text-xs font-light" @click="()=>{showAll[4] = !showAll[4]}">{{ showAll[4] ? '收起' : '查看全部' }}</Button>
             </div>
             <!-- 素材列表 -->
-            <div class="flex flex-row pr-4 gap-2.5">
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="背景"></material-item>
-                </div>
-                <div class="w-[4.8vw] aspect-[14/13]">
-                    <material-item img_name="背景"></material-item>
-                </div>
+            <div class="relative flex flex-row flex-wrap pr-[1vw] justify-between z-0">
+                <MaterialList img_name="背景" :MaterialList="selectedOtherMaterialList[4]" :showAll="showAll[4]"></MaterialList>
             </div>
         </div>
     </div>

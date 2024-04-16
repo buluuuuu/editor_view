@@ -21,9 +21,5 @@ export default defineConfig({
   base:'./',
   optimizeDeps: {
     exclude: ['vue'],
-  },
-  build: {
-    minify: false, // 禁用代码压缩
-    sourcemap: true, // 生成 sourcemap 以便调试
-  },
+  }
 })

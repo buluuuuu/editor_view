@@ -40,7 +40,7 @@ const src = computed(() => {
          @dragstart="handleDragStart"
          @dragend="handleDragEnd"
          class="w-[80%] h-[80%] object-contain text-xs" 
-         src="../assets/pika.png" 
+         :src="props.img.img_url"
          alt="加载失败">
     </div>
 </template>
