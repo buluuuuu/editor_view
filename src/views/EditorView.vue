@@ -2,11 +2,14 @@
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
+import Toast from "primevue/toast"
+import { useToast } from "primevue/usetoast"
+const toast = useToast()
 
 import draggable from 'vuedraggable'
 import Drager from 'es-drager'
 import 'es-drager/lib/style.css'
-import { cloneDeep, debounce } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { useRouter } from 'vue-router'
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
@@ -59,7 +62,7 @@ onMounted(async () => {
   projectInfo.value.name = router.currentRoute.value.query.name || '未命名'
   record.snapshots.push([])
   record.curIndex++
-  watch(itemList, debounce(recordPush, 50), { deep: true })
+  // watch(itemList, debounce(recordPush, 50), { deep: true })
 
   // 监听删除素材事件
   window.addEventListener('keyup', handleDeleteMaterial)
@@ -131,55 +134,67 @@ const selectedItemIndex = ref(-1)
 const selected = ref('hidden')
 // 每个素材的参数
 const w_pos = computed({
-  get: () => {
-    if (
-      selected.value !== 'hidden' &&
-      selectedItemIndex.value < itemList.value.length &&
-      selectedItemIndex.value >= 0
-    ) {
-      return itemList.value[selectedItemIndex.value].w_pos
-    } else return 0
-  },
-  set: (val) => {
-    if (selectedItemIndex.value == -1) return
-    val = parseFloat(val.toFixed(1))
-    if (val >= 1 || val <= 0) return
-    itemList.value[selectedItemIndex.value].w_pos = val
-  }
+    get: () => {
+        if(selected.value !== 'hidden' && selectedItemIndex.value < itemList.value.length && selectedItemIndex.value >= 0)
+        {
+            return itemList.value[selectedItemIndex.value].w_pos
+        }
+        else return 0
+    },
+    set: (val) => {
+        if (selectedItemIndex.value == -1) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: '未选择素材', life: 3000 });
+            return
+        }
+        val = parseFloat(val.toFixed(1))
+        if (val >= 1 || val <= 0) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: '正向影响力范围为(0,1)', life: 3000 });
+            return
+        }
+        itemList.value[selectedItemIndex.value].w_pos = val
+    }
 })
 const w_neg = computed({
-  get: () => {
-    if (
-      selected.value !== 'hidden' &&
-      selectedItemIndex.value < itemList.value.length &&
-      selectedItemIndex.value >= 0
-    ) {
-      return itemList.value[selectedItemIndex.value].w_neg
-    } else return 0
-  },
-  set: (val) => {
-    if (selectedItemIndex.value == -1) return
-    val = parseFloat(val.toFixed(1))
-    if (val >= 3 || val <= 0) return
-    itemList.value[selectedItemIndex.value].w_neg = val
-  }
+    get: () => {
+        if(selected.value !== 'hidden' && selectedItemIndex.value < itemList.value.length && selectedItemIndex.value >= 0) 
+        {
+            return itemList.value[selectedItemIndex.value].w_neg
+        }
+        else return 0
+    },
+    set: (val) => {
+        if (selectedItemIndex.value == -1) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: '未选择素材', life: 3000 });
+            return
+        }
+        val = parseFloat(val.toFixed(1))
+        if (val >= 3 || val <= 0) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: '负向影响力范围为(0,3)', life: 3000 });
+            return
+        }
+        itemList.value[selectedItemIndex.value].w_neg = val
+    }
 })
 const t_i = computed({
-  get: () => {
-    if (
-      selected.value != 'hidden' &&
-      selectedItemIndex.value < itemList.value.length &&
-      selectedItemIndex.value >= 0
-    ) {
-      return itemList.value[selectedItemIndex.value].t_i
-    } else return 0
-  },
-  set: (val) => {
-    if (selectedItemIndex.value == -1) return
-    val = parseFloat(val.toFixed(1))
-    if (val > 1 || val < 0) return
-    itemList.value[selectedItemIndex.value].t_i = val
-  }
+    get: () => {
+        if(selected.value != 'hidden' && selectedItemIndex.value < itemList.value.length && selectedItemIndex.value >= 0) 
+        {
+            return itemList.value[selectedItemIndex.value].t_i
+        }
+        else return 0
+    },
+    set: (val) => {
+        if (selectedItemIndex.value == -1) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: '未选择素材', life: 3000 });
+            return
+        }
+        val = parseFloat(val.toFixed(1))
+        if (val > 1 || val < 0) {
+            toast.add({ severity: 'warn', summary: 'Warning', detail: '影响因子范围为[0,1]', life: 3000 });
+            return
+        }
+        itemList.value[selectedItemIndex.value].t_i = val
+    }
 })
 
 const saveSuccess = ref('hidden')
@@ -226,6 +241,7 @@ const handleMouseUp = (e) => {
   drag_evt.item.top = drag_evt.item_top + (e.clientY - drag_evt.top) / canvas_scale.value
   window.removeEventListener('mousemove', handleMouseMove)
   window.removeEventListener('mouseup', handleMouseUp)
+  recordPush()
 }
 const handleClick = (e, index) => {
   selected.value = 'visible'
@@ -249,14 +265,17 @@ const handleBlur = (e, index = null) => {}
 const handleResizeEnd = (e, item) => {
   item.width = e.width
   item.height = e.height
+  recordPush()
 }
 const handleRotateEnd = (e, item) => {
   item.angle = e.angle
+  recordPush()
 }
 
 const handleDeleteMaterial = (e) => {
   if (e.target.tagName !== 'INPUT' && (e.keyCode == 46 || e.keyCode == 8)) {
     if (selectedItemIndex.value !== -1) {
+      recordPush()
       itemList.value.splice(selectedItemIndex.value, 1)
       selectedItemIndex.value = -1
     }
@@ -273,26 +292,26 @@ const record = {
 }
 
 // 比较是否相同
-const same = () => {
-  if (itemList.value.length != record.snapshots[record.curIndex - 1].length) return false
-  for (let i = 0; i < itemList.value.length; ++i) {
-    for (let key in itemList.value[i]) {
-      if (
-        key != 'ref' &&
-        itemList.value[i][key] !== record.snapshots[record.curIndex - 1][i][key]
-      ) {
-        return false
-      }
-    }
-  }
-  return true
-}
+// const same = () => {
+//   if (itemList.value.length != record.snapshots[record.curIndex - 1].length) return false
+//   for (let i = 0; i < itemList.value.length; ++i) {
+//     for (let key in itemList.value[i]) {
+//       if (
+//         key != 'ref' &&
+//         itemList.value[i][key] !== record.snapshots[record.curIndex - 1][i][key]
+//       ) {
+//         return false
+//       }
+//     }
+//   }
+//   return true
+// }
 
 const recordPush = () => {
   // 不需要生成快照，退出
-  if (same()) {
-    return
-  }
+  // if (same()) {
+  //   return
+  // }
   // 超出限制，删掉第一个快照
   if (record.curIndex == record.maxLimit) {
     record.snapshots.shift()
@@ -319,9 +338,19 @@ const handleRedo = () => {
   record.curIndex = record.curIndex + 1
   itemList.value = cloneDeep(record.snapshots[record.curIndex - 1])
 }
+
+const uploadImg = ref()
+const uploadClick = () => {
+    uploadImg.value.click()
+}
+const selectFile = async event => {
+    const upload_img_file = event.target.files[0]
+    toast.add({ severity: 'success', summary: 'Success', detail: '素材上传成功', life: 3000 })
+}
 </script>
 
 <template>
+  <Toast />
   <main class="flex flex-col h-screen w-screen divide-y">
     <!-- header -->
     <div class="flex flex-row grow-0 h-fit px-9 py-4 justify-between align-middle text-center">
@@ -546,24 +575,19 @@ const handleRedo = () => {
       </div>
       <!-- 左边素材 -->
       <div class="relative flex flex-col w-[20vw] px-4 pt-7 z-[100]">
-        <div :class="{ hidden: leftBtn == 'material' }" class="w-full h-full">
-          <Button
-            class="flex flex-row gap-1 mx-auto my-0 px-[2.8rem] py-2 border border-[#FFE18C] text-[--c-grey] fill-[--c-grey] stroke-white upload"
-            outlined
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M7.29999 11.5C7.29999 11.8866 7.61339 12.2 7.99999 12.2C8.38659 12.2 8.69999 11.8866 8.69999 11.5L8.69999 3.38995L11.005 5.69498C11.2784 5.96834 11.7216 5.96834 11.995 5.69498C12.2683 5.42161 12.2683 4.97839 11.995 4.70503L8.49497 1.20503C8.2216 0.931658 7.77838 0.931658 7.50502 1.20503L4.00502 4.70503C3.73165 4.97839 3.73165 5.42161 4.00501 5.69498C4.27838 5.96834 4.7216 5.96834 4.99496 5.69498L7.29999 3.38995L7.29999 11.5ZM2.4 10.1C2.4 9.7134 2.0866 9.4 1.7 9.4C1.3134 9.4 1 9.7134 1 10.1V12.9C1 14.0598 1.9402 15 3.1 15H12.9C14.0598 15 15 14.0598 15 12.9V10.1C15 9.7134 14.6866 9.4 14.3 9.4C13.9134 9.4 13.6 9.7134 13.6 10.1V12.9C13.6 13.2866 13.2866 13.6 12.9 13.6H3.1C2.7134 13.6 2.4 13.2866 2.4 12.9V10.1Z"
-                stroke-width="0.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <span class="text-sm">上传本地素材</span>
-          </Button>
-        </div>
+        <div :class="{hidden: leftBtn=='material'}" class="w-full h-full">
+                <label for="uploadImg">
+                    <Button class="flex flex-row gap-1 mx-auto my-0 px-[2.8rem] py-2 border border-[#FFE18C] text-[--c-grey] fill-[--c-grey] stroke-white upload" outlined
+                     @click="uploadClick"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29999 11.5C7.29999 11.8866 7.61339 12.2 7.99999 12. 2C8.38659 12.2 8.69999 11.8866 8.69999 11.5L8.69999 3.38995L11.005 5.69498C11.2784 5.96834 11.7216 5.    96834 11.995 5.69498C12.2683 5.42161 12.2683 4.97839 11.995 4.70503L8.49497 1.20503C8.2216 0.931658 7.  77838 0.931658 7.50502 1.20503L4.00502 4.70503C3.73165 4.97839 3.73165 5.42161 4.00501 5.69498C4.27838    5.96834 4.7216 5.96834 4.99496 5.69498L7.29999 3.38995L7.29999 11.5ZM2.4 10.1C2.4 9.7134 2.0866 9.4 1. 7 9.4C1.3134 9.4 1 9.7134 1 10.1V12.9C1 14.0598 1.9402 15 3.1 15H12.9C14.0598 15 15 14.0598 15 12.9V10.  1C15 9.7134 14.6866 9.4 14.3 9.4C13.9134 9.4 13.6 9.7134 13.6 10.1V12.9C13.6 13.2866 13.2866 13.6 12.9    13.6H3.1C2.7134 13.6 2.4 13.2866 2.4 12.9V10.1Z" stroke-width="0.5" stroke-linecap="round"     stroke-linejoin="round"/>
+                        </svg>
+                        <span class="text-sm">上传本地素材</span>
+                    </Button>
+                </label>
+                <input type="file" id="uploadImg" name="uploadImg" ref="uploadImg" accept=".jpg, .png" class="opacity-0" @change="selectFile"/>
+            </div>
         <material-container
           :selectedStyles="projectInfo.style"
           :selectedTypes="projectInfo.type"

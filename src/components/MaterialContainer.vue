@@ -54,47 +54,54 @@ const handleSelectType = (e) => {
     showTypes.value = false
 }
 
+function getImageUrl(name) {
+    // console.log(new URL(import.meta.url).href);
+    // return new URL(`/${name}.png`, import.meta.url).href
+    // return new URL(`../public/${name}.png`, import.meta.url).href
+return `/${name}.png`
+}
+
 const materialList = [
     [
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】1.png', styles:['温馨风'], types: ['美妆类']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】2.png', styles:['温馨风'], types: ['美妆类']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】3.png', styles:['温馨风'], types: ['美妆类']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】4.png', styles:['温馨风'], types: ['美妆类']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】皮带.png', styles:['节日风', '喜庆风'], types: ['服装']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】礼盒正面.png', styles:['节日风', '喜庆风'], types: ['服装']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【主体物】礼盒轴测面.png', styles:['节日风', '喜庆风'], types: ['服装']}
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】1'), styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】2'), styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】3'), styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】4'), styles:['温馨风'], types: ['美妆类']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】皮带'), styles:['节日风', '喜庆风'], types: ['服装']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】礼盒正面'), styles:['节日风', '喜庆风'], types: ['服装']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【主体物】礼盒轴测面'), styles:['节日风', '喜庆风'], types: ['服装']}
     ],
     [
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】垫石.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】布料.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】石头.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】礼物盒.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】红色不带壳盒子.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】红色带壳盒子.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣1.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣2.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【装饰物】花瓣3.png', styles:['温馨风']}
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】垫石'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】布料'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】石头'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】礼物盒'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】红色不带壳盒子'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】红色带壳盒子'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】花瓣'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】花瓣1'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】花瓣2'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【装饰物】花瓣3'), styles:['温馨风']}
     ],
     [
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】双11.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】文案.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】晒单返20元E卡.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】植物温和洁面 _ 紧致肌肤毛孔.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】氨基酸美白洁面乳.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】点击进入.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【标语】立即购买     _.png', styles:['温馨风']}
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】双11'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】文案'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】晒单返20元E卡'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】植物温和洁面 _ 紧致肌肤毛孔'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】氨基酸美白洁面乳'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】点击进入'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【标语】立即购买     _'), styles:['温馨风']}
     ],
     [
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【LOGO】.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【LOGO】1.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【LOGO】海澜之家.png', styles:['节日风', '喜庆风']}
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【LOGO】'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【LOGO】1'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【LOGO】海澜之家'), styles:['节日风', '喜庆风']}
     ],
     [
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】.png', styles:['温馨风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】1.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】2.png', styles:['节日风', '喜庆风']},
-        {id: Math.round(Math.random()*10000), img_url: './src/assets/【背景】3.png', styles:['节日风', '喜庆风']}
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【背景】'), styles:['温馨风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【背景】1'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【背景】2'), styles:['节日风', '喜庆风']},
+        {id: Math.round(Math.random()*10000), img_url: getImageUrl('【背景】3'), styles:['节日风', '喜庆风']}
     ]
 ]
 
